@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  graphql:
+    container_name: graphql
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    depends_on:
+      - productdbrepl
+      - productdb
+    env_file:
+      - ./.env
+
+  productdbrepl:
+    container_name: productdbrepl
+    image: mongo
+    depends_on:
+      - productdb
+    command:
+      [
+        'bash',
+        '-c',
+        'sleep 10 && mongo --host productdb:27017 --eval "rs.initiate()"',
+      ]
+    restart: 'no'
+
+  productdb:
+    container_name: productdb
+    image: mongo
+    command: ['--replSet=dev']
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGODB_DATABASE: graphql
+
+networks:
+  default:
+    name: dev
+    driver: bridge
