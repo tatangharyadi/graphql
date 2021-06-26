@@ -1,2 +1,2 @@
 # GraphQL
-Implementation of GraphQL service using TypeScript, NestJS and MongoDB.
+Implementation of GraphQL using TypeScript, NestJS and MongoDB.
