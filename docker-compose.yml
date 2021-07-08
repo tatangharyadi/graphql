@@ -33,7 +33,7 @@ services:
     container_name: productdb
     image: mongo
     command: ['--replSet=dev']
-    restart: always
+    restart: unless-stopped
     ports:
       - 27017:27017
     environment:
