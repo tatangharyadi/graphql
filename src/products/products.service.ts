@@ -5,8 +5,11 @@ import { MongooseService } from 'src/common/mongoose.service';
 import { Product } from './entities/product.entity';
 
 @Injectable()
-export class ProductsService extends MongooseService{
+export class ProductsService extends MongooseService {
     constructor(
-        @InjectModel(Product.name) private readonly productModel: Model<Product>
-    ) {super(productModel)}
+        @InjectModel(Product.name)
+        private readonly productModel: Model<Product>,
+    ) {
+        super(productModel);
+    }
 }

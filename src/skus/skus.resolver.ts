@@ -1,4 +1,13 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+    Args,
+    Mutation,
+    Parent,
+    Query,
+    ResolveField,
+    Resolver,
+} from '@nestjs/graphql';
+import { Product } from 'src/products/entities/product.entity';
+import { ProductsService } from 'src/products/products.service';
 import { SkuArgs } from './dto/args/sku.args';
 import { SkusArgs } from './dto/args/skus.args';
 import { CreateSkuInput } from './dto/input/create-sku.input';
@@ -9,7 +18,10 @@ import { SkusService } from './skus.service';
 
 @Resolver(() => Sku)
 export class SkusResolver {
-    constructor(private readonly skuService: SkusService) {}
+    constructor(
+        private readonly skuService: SkusService,
+        private readonly productService: ProductsService,
+    ) {}
 
     @Mutation(() => Sku)
     async createSku(@Args('input') createSku: CreateSkuInput): Promise<Sku> {
@@ -34,5 +46,10 @@ export class SkusResolver {
     @Mutation(() => Sku)
     async deleteSku(@Args('input') deleteSku: DeleteSkuInput): Promise<Sku> {
         return this.skuService.delete(deleteSku.id);
+    }
+
+    @ResolveField('product', () => Product)
+    async findProduct(@Parent() sku: Sku) {
+        return this.productService.findOne(sku.product.toString());
     }
 }

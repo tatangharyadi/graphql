@@ -16,5 +16,6 @@ import { SkusModule } from 'src/skus/skus.module';
         SkusModule,
     ],
     providers: [ProductsService, ProductsResolver],
+    exports: [ProductsService],
 })
 export class ProductsModule {}
