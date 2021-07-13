@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     ports:
-      - 3000:3000
+      - 3010:3000
     volumes:
       - .:/app
     depends_on:
@@ -36,6 +36,8 @@ services:
     restart: unless-stopped
     ports:
       - 27017:27017
+    volumes:
+      - product_data:/data/db
     environment:
       MONGODB_DATABASE: graphql
 
@@ -43,3 +45,7 @@ networks:
   default:
     name: dev
     driver: bridge
+
+volumes:
+  product_data:
+    name: product-data

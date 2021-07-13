@@ -5,6 +5,7 @@ import {
     Query,
     ResolveField,
     Resolver,
+    ResolveReference,
 } from '@nestjs/graphql';
 import { Sku } from 'src/skus/entities/sku.entity';
 import { SkusService } from 'src/skus/skus.service';
@@ -33,6 +34,14 @@ export class ProductsResolver {
     @Query(() => Product, { name: 'product', nullable: true })
     async findOne(@Args() productArgs: ProductArgs): Promise<Product> {
         return this.productService.findOne(productArgs.id);
+    }
+
+    @ResolveReference()
+    resolveReference(reference: {
+        __typename: string;
+        id: string;
+    }): Promise<Product> {
+        return this.productService.findOne(reference.id);
     }
 
     @Query(() => [Product], { name: 'products', nullable: 'items' })
